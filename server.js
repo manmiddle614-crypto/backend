@@ -119,8 +119,22 @@ if (process.env.NODE_ENV === 'production' && !process.env.FRONTEND_URL) {
 }
 
 const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? [process.env.FRONTEND_URL, 'https://messtracker.online', 'https://www.messtracker.online']
-  : ['http://localhost:5173', 'http://10.102.213.203:3000', 'http://10.58.44.203:5173', 'capacitor://localhost', 'ionic://localhost'];
+  ? [
+      process.env.FRONTEND_URL,
+      'https://messtracker.online',
+      'https://www.messtracker.online',
+      'https://localhost',        // ✅ REQUIRED for Capacitor Android
+      'capacitor://localhost',
+      'https://backend-2-d6pm.onrender.com     // ✅ Safe to keep
+    ]
+  : [
+      'http://localhost:5173',
+      'http://10.102.213.203:3000',
+      'http://10.58.44.203:5173',
+      'capacitor://localhost',
+      'ionic://localhost'
+    ];
+
 
 logger.info('CORS allowed origins:', allowedOrigins);
 
