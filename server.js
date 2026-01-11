@@ -123,12 +123,15 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
       process.env.FRONTEND_URL,
       'https://messtracker.online',
       'https://www.messtracker.online',
-      'https://localhost',        // ✅ REQUIRED for Capacitor Android
-      'capacitor://localhost',
-      'https://backend-2-d6pm.onrender.com     // ✅ Safe to keep
+      'https://localhost',        // ✅ Capacitor Android
+      'capacitor://localhost',    // ✅ Capacitor iOS
+      'ionic://localhost',        // ✅ Ionic
+      'http://localhost',         // ✅ Capacitor Android HTTP
+      'file://'                   // ✅ Capacitor file protocol
     ]
   : [
       'http://localhost:5173',
+      'https://localhost:5173',
       'http://10.102.213.203:3000',
       'http://10.58.44.203:5173',
       'capacitor://localhost',
@@ -139,20 +142,7 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
 logger.info('CORS allowed origins:', allowedOrigins);
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    
-    // Check exact match
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    
-    // Check ngrok pattern (development only)
-    if (process.env.NODE_ENV !== 'production' && origin.match(/^https:\/\/.*\.ngrok-free\.dev$/)) {
-      return callback(null, true);
-    }
-    
-    logger.warn('CORS blocked origin:', origin);
-    callback(new Error('Not allowed by CORS'));
-  },
+  origin: true,  // Allow all origins for mobile app
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
